@@ -205,6 +205,13 @@ docker run -it -m1g -v "/opt/docker/drawiodata/letsencrypt-log:/var/log/letsencr
 ```
 Notice that mapping port 80 to container's port 80 allows certbot to work in stand-alone mode. Mapping port 443 to container's port 8443 allows the container tomcat to serve https requests directly.
 
+## License
+
+This project — the Docker packaging for draw.io in this repository — is licensed under the
+GNU General Public License v3. See [LICENSE](LICENSE).
+
+Software included in the built image is covered by its own licence terms, not by this one.
+
 ## Reference
 
 * <https://github.com/jgraph/drawio>
