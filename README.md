@@ -125,6 +125,11 @@ All container behaviour is controlled by environment variables, processed by [`m
 * **DRAWIO_LIGHTBOX_URL**: Optional lightbox URL, e.g. `https://drawio.example.com`.
 * **DRAWIO_USE_HTTP**: (Optional and INSECURE) If your setup uses http only and you understand the risks (for example, sending OAuth tokens over http), set `DRAWIO_USE_HTTP=1`. **Caution: Use at your own risk**.
 
+**Sign-in under a sub-path:** Google Drive, OneDrive and GitLab sign-in under a sub-path needs an image newer than 31.5.2. Register the OAuth redirect URIs under `DRAWIO_SERVER_URL`, e.g. `https://www.example.com/drawio/gitlab`. The Tomcat context path is only the last segment of the sub-path (`https://www.example.com/tools/drawio/` is served at `/drawio`), and the sign-in cookies are scoped to it. If your reverse proxy maps a different public path onto it, also rewrite the cookie paths, or sign-in fails with a 401:
+
+* nginx: `proxy_cookie_path /drawio/ /tools/drawio/;`
+* Apache (mod_headers): `Header edit Set-Cookie "(?i)(;\s*path=)/drawio/" "$1/tools/drawio/"`
+
 ### Editor configuration
 
 * **DRAWIO_CONFIG**: JSON configuration object for the diagram editor — written verbatim into `window.DRAWIO_CONFIG`. See <https://www.drawio.com/doc/faq/configure-diagram-editor>. Must be valid JSON, not arbitrary JavaScript, and must be the JSON itself, not the path of a file (see `DRAWIO_CONFIG_FILE`). The entrypoint logs a warning at startup when the value does not parse as JSON. In a compose file use the map syntax, `DRAWIO_CONFIG: '{"defaultFonts":["Helvetica"]}'` — with the list syntax (`- DRAWIO_CONFIG='{...}'`) the quotes become part of the value and the editor ignores it (the entrypoint strips a matching pair of single quotes and logs a notice).
